@@ -1,0 +1,107 @@
+/*Show Customers (their full names, customer ID, and country) who are not in the US.*/
+
+SELECT customerId, firstName || ' ' || LastName AS fullName, country
+FROM chinook.customers
+WHERE country != 'USA';
+
+/*Show only the Customers from Brazil.*/
+
+SELECT customerId, firstName || ' ' || LastName AS fullName, country
+FROM chinook.customers
+WHERE country = 'Brazil';
+
+/*Find the Invoices of customers who are from Brazil. 
+The resulting table should show the customer's full name, 
+Invoice ID, Date of the invoice, and billing country.*/
+
+SELECT cust.firstName, cust.LastName,
+inv.InvoiceId, inv.InvoiceDate,
+inv.BillingCountry
+
+FROM chinook.invoices as inv
+left join chinook.customers as cust
+on inv.CustomerId = cust.customerId
+WHERE country = 'Brazil';
+
+/*Show the Employees who are Sales Agents.*/
+
+SELECT EmployeeId, FirstName || ' ' || LastName as fullName,
+Title
+FROM chinook.employees
+WHERE Title LIKE '%Agent%';
+
+/*Find a unique/distinct list of billing countries 
+from the Invoice table.*/
+
+SELECT DISTINCT BillingCountry
+FROM chinook.invoices;
+
+/*Provide a query that shows the invoices 
+associated with each sales agent. 
+The resulting table should include the 
+Sales Agent's full name.*/
+
+SELECT invoices.InvoiceId,
+cust.SupportRepId,
+employees.FirstName,
+employees.LastName
+FROM chinook.invoices
+
+join chinook.customers as cust
+on invoices.CustomerId = cust.CustomerId
+
+join chinook.employees 
+on employees.EmployeeId = cust.CustomerId;
+
+/*Show the Invoice Total, Customer name, Country, 
+and Sales Agent name for all invoices and customers.*/
+
+SELECT invoices.InvoiceId, invoices.Total,
+cust.FirstName as custfirstName, cust.LastName as custLastname,
+employees.FirstName as salesfirstName,
+employees.LastName as saleslastName
+FROM chinook.invoices
+
+join chinook.customers as cust
+on invoices.CustomerId = cust.CustomerId
+
+join chinook.employees 
+on employees.EmployeeId = cust.CustomerId;
+
+/*How many Invoices were there in 2009?*/
+
+SELECT COUNT(InvoiceId)
+FROM chinook.invoices
+WHERE InvoiceDate like '%2009%';
+
+/*What are the total sales for 2009?*/
+
+SELECT SUM(Total)
+FROM chinook.Invoices
+WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+
+/*Which track had the most invoices in 2009?*/
+SELECT invoices.InvoiceId,
+MAX(Total),
+items.TrackId
+FROM chinook.invoices
+join chinook.invoice_items as items
+on invoices.InvoiceId = items.InvoiceId;
+
+/*Show the names of the artists and their albums*/
+SELECT artists.name,
+albums.Title
+FROM chinook.albums
+join chinook.artists
+on albums.ArtistId = artists.ArtistId;
+
+/*In what year were the most invoices ordered?*/
+SELECT MAX(Total),
+InvoiceDate
+FROM chinook.invoices;
+
+/*How many employees do we have in Canada?*/
+
+SELECT COUNT(*)
+FROM chinook.employees
+WHERE Country = 'Canada';
