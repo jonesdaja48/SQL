@@ -1,0 +1,122 @@
+use sephora_reviews;
+SELECT * FROM product_info;
+
+SELECT * FROM customer_reviews_combined;
+/*
+What was the average rating of products at Sephora last year?
+*/
+
+SELECT ROUND(AVG(rating), 2 )as avg_rating
+FROM product_info;
+
+/*
+How many of our products had a rating of 4.5 or higher last year?
+*/
+SELECT COUNT(rating) AS high_rating_amount
+FROM product_info
+WHERE rating >= 4.3;
+/*
+What were the top 50 most popular products at Sephora last year?
+*/
+
+SELECT product_id, 
+product_name,
+rating
+FROM product_info
+WHERE rating >=4.3
+ORDER BY rating desc 
+limit 50;
+
+/*
+What is the average price of the top 50 most popular products?
+*/
+
+SELECT DISTINCT
+product_name,
+rating,
+AVG(price_usd) AS avg_price
+FROM product_info
+WHERE rating >= 4.3
+GROUP BY product_name, rating
+ORDER BY avg_price
+limit 50; 
+
+/*
+What were the most highly rated categories last year?
+*/
+
+SELECT DISTINCT primary_category,
+COUNT(primary_category) AS category_amount
+FROM product_info
+WHERE rating >= 4.3
+GROUP BY primary_category
+ORDER BY category_amount desc;
+
+/*
+What were the top 50 brands last year?
+*/
+SELECT DISTINCT brand_id,
+brand_name,
+rating
+FROM product_info
+WHERE rating >=4.3
+ORDER BY rating desc
+LIMIT 50;
+
+/*
+What was the average price of the top 50 brands last year?
+*/
+SELECT DISTINCT brand_name,
+       ROUND(avg(price_usd), 2) as avg_brand_price
+FROM product_info
+WHERE rating >= 4.3
+GROUP BY brand_name
+ORDER BY avg_brand_price desc
+limit 50;
+
+/*
+How many consumers reviewed the products?
+*/
+
+SELECT COUNT(author_id) as cnt_consumer
+FROM customer_reviews_combined;
+
+/*
+How many consumers recommended the products?
+*/
+
+SELECT COUNT(is_recommended) as recommend_cnt
+FROM customer_reviews_combined
+WHERE is_recommended = '1';
+
+
+/*
+How many of the most popular products were limited editition?
+*/
+
+SELECT
+COUNT(limited_edition) lim_ed_cnt
+FROM product_info
+WHERE rating >= 4.3 AND limited_edition = '1';
+
+
+/*
+How many of the most popular products were Sephora exclusive?
+*/
+SELECT
+COUNT(sephora_exclusive) exclusive_cnt
+FROM product_info
+WHERE rating >= 4.3 AND sephora_exclusive = '1';
+
+
+/*
+Business Insights:
+	This analysis gives insight into how product reviews can help a business understand which merchandise to continue pushing and marketing to consumers.
+    
+    I used Excel to clean up some of the data by getting rid of columns I knew would not be necessary for the analysis. This made it easier to view the data,
+     and get a bette idea of of how to answer business questions the merchandising team would have. I then used SQL to figure out what the average salary was, as this 
+     would help me to figure out what were the top 50 products and brands based off of the ratings. Each SQL statement helped me find out which products and brands were the 
+     most popular among consumers, which categories were the most popular, and whether characteristics (such as Sephora Exclusive) affect a product's rating. These insights
+     will give the merchandising team a better idea on which products, brands, and product categories to focus on.
+     
+*/
