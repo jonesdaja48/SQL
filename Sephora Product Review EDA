@@ -1,3 +1,9 @@
+/*
+The merchandising team at Sephora wants to know which products and brands were the most profitable and which products/brands should be restocked.
+The team also wants to know which products  and brands should be marketed the most. 
+*/
+
+
 use sephora_reviews;
 SELECT * FROM product_info;
 
